@@ -8,14 +8,15 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject var authViewModel: AuthViewModel
+
     var body: some View {
         NavigationStack {
-            VStack {
-                NavigationLink("Перейти на экран входа") {
-                    LoginView()
-                }
+            if let user = authViewModel.user {
+                ProfileView(userEmail: user.email ?? "")
+            } else {
+                LoginView()
             }
-            .padding()
         }
     }
 }
@@ -23,5 +24,6 @@ struct ContentView: View {
 #Preview {
     NavigationStack {
         ContentView()
+            .environmentObject(AuthViewModel())
     }
 }

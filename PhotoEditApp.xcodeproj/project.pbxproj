@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		885FD2502DC853D70053FAFA /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 885FD24F2DC853D70053FAFA /* FirebaseAnalytics */; };
+		88EC94512DC9AC69006227ED /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 88EC94502DC9AC69006227ED /* FirebaseAuth */; };
+		88EC94532DC9AC69006227ED /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 88EC94522DC9AC69006227ED /* FirebaseCore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +30,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				885FD2502DC853D70053FAFA /* FirebaseAnalytics in Frameworks */,
+				88EC94532DC9AC69006227ED /* FirebaseCore in Frameworks */,
+				88EC94512DC9AC69006227ED /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +75,8 @@
 			name = PhotoEditApp;
 			packageProductDependencies = (
 				885FD24F2DC853D70053FAFA /* FirebaseAnalytics */,
+				88EC94502DC9AC69006227ED /* FirebaseAuth */,
+				88EC94522DC9AC69006227ED /* FirebaseCore */,
 			);
 			productName = PhotoEditApp;
 			productReference = 882AA4802DC3A4E200F8714F /* PhotoEditApp.app */;
@@ -350,6 +356,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 885FD24E2DC853D70053FAFA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAnalytics;
+		};
+		88EC94502DC9AC69006227ED /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 885FD24E2DC853D70053FAFA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		88EC94522DC9AC69006227ED /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 885FD24E2DC853D70053FAFA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
