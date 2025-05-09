@@ -7,18 +7,31 @@
 
 import SwiftUI
 import FirebaseAuth
+import PhotosUI
 
 struct ProfileView: View {
     let userEmail: String
     @EnvironmentObject var authViewModel: AuthViewModel
+    @State private var selectedItem: PhotosPickerItem? = nil
+    @State private var profileImageData: Data? = nil
 
     var body: some View {
         VStack(spacing: 20) {
+            avatarImage
+            uploadButton
+
             header
             emailText
             signOutButton
         }
         .padding()
+        .onChange(of: selectedItem) { _, newItem in
+            Task {
+                if let data = try? await newItem?.loadTransferable(type: Data.self) {
+                    profileImageData = data
+                }
+            }
+        }
     }
 }
 
@@ -47,6 +60,38 @@ private extension ProfileView {
         .background(Color.red)
         .foregroundColor(.white)
         .cornerRadius(10)
+    }
+    
+    var avatarImage: some View {
+        Group {
+            if let data = profileImageData,
+               let uiImage = UIImage(data: data) {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 120, height: 120)
+                    .clipShape(Circle())
+                    .shadow(radius: 5)
+            } else {
+                Image(systemName: "person.crop.circle.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 120, height: 120)
+                    .foregroundColor(.gray)
+            }
+        }
+    }
+    
+    var uploadButton: some View {
+        PhotosPicker(selection: $selectedItem,
+                     matching: .images,
+                     photoLibrary: .shared()) {
+            Text("Выбрать изображение")
+                .padding()
+                .background(Color.blue)
+                .foregroundColor(.white)
+                .cornerRadius(10)
+        }
     }
 }
 
