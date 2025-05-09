@@ -19,6 +19,7 @@ struct ProfileView: View {
         VStack(spacing: 20) {
             avatarImage
             uploadButton
+            deleteButton
 
             header
             emailText
@@ -92,6 +93,15 @@ private extension ProfileView {
                 .foregroundColor(.white)
                 .cornerRadius(10)
         }
+    }
+    var deleteButton: some View {
+        Button("Удалить изображение") {
+            profileImageBase64 = ""
+        }
+        .padding()
+        .foregroundColor(.white)
+        .background(Color.gray)
+        .cornerRadius(10)
     }
     
     private var profileImageData: Data? {
