@@ -13,7 +13,7 @@ struct ProfileView: View {
     let userEmail: String
     @EnvironmentObject var authViewModel: AuthViewModel
     @State private var selectedItem: PhotosPickerItem? = nil
-    @State private var profileImageData: Data? = nil
+    @AppStorage("profileImageData") private var profileImageBase64: String = ""
 
     var body: some View {
         VStack(spacing: 20) {
@@ -28,7 +28,7 @@ struct ProfileView: View {
         .onChange(of: selectedItem) { _, newItem in
             Task {
                 if let data = try? await newItem?.loadTransferable(type: Data.self) {
-                    profileImageData = data
+                    profileImageBase64 = data.base64EncodedString()
                 }
             }
         }
@@ -92,6 +92,10 @@ private extension ProfileView {
                 .foregroundColor(.white)
                 .cornerRadius(10)
         }
+    }
+    
+    private var profileImageData: Data? {
+        Data(base64Encoded: profileImageBase64)
     }
 }
 
