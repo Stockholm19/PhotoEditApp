@@ -19,11 +19,16 @@ struct PhotoEditorView: View {
     @State private var currentRotation: Angle = .zero
     @State private var finalRotation: Angle = .zero
     
+    @State private var textOverlay: String = ""
+    @State private var textPosition = CGSize.zero
+    
     @AppStorage("profileImageData") private var profileImageBase64: String = ""
 
     var body: some View {
         VStack(spacing: 20) {
             editableImage
+            textInputField
+            
             uploadButton
             deleteButton
 
@@ -76,33 +81,50 @@ private extension PhotoEditorView {
         Group {
             if let data = profileImageData,
                let uiImage = UIImage(data: data) {
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: 300, maxHeight: 300)
-                    .shadow(radius: 5)
-                    .scaleEffect(currentScale * finalScale)
-                    .rotationEffect(currentRotation + finalRotation)
-                    .gesture(
-                        MagnificationGesture()
-                            .onChanged { value in
-                                currentScale = value
-                            }
-                            .onEnded { value in
-                                finalScale *= value
-                                currentScale = 1.0
-                            }
-                            .simultaneously(with:
-                                RotationGesture()
-                                    .onChanged { angle in
-                                        currentRotation = angle
-                                    }
-                                    .onEnded { angle in
-                                        finalRotation += angle
-                                        currentRotation = .zero
-                                    }
-                            )
-                    )
+                ZStack {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxWidth: 300, maxHeight: 300)
+                        .shadow(radius: 5)
+                        .scaleEffect(currentScale * finalScale)
+                        .rotationEffect(currentRotation + finalRotation)
+
+                    Text(textOverlay)
+                        .font(.title2)
+                        .bold()
+                        .foregroundColor(.black)
+                        .background(Color.white.opacity(0.7))
+                        .cornerRadius(4)
+                        .shadow(radius: 3)
+                        .offset(textPosition)
+                        .gesture(
+                            DragGesture()
+                                .onChanged { value in
+                                    textPosition = value.translation
+                                }
+                        )
+                }
+                .gesture(
+                    MagnificationGesture()
+                        .onChanged { value in
+                            currentScale = value
+                        }
+                        .onEnded { value in
+                            finalScale *= value
+                            currentScale = 1.0
+                        }
+                        .simultaneously(with:
+                            RotationGesture()
+                                .onChanged { angle in
+                                    currentRotation = angle
+                                }
+                                .onEnded { angle in
+                                    finalRotation += angle
+                                    currentRotation = .zero
+                                }
+                        )
+                )
             } else {
                 Image(systemName: "photo")
                     .resizable()
@@ -111,6 +133,13 @@ private extension PhotoEditorView {
                     .foregroundColor(.gray)
             }
         }
+    }
+    var textInputField: some View {
+        TextField("Введите текст", text: $textOverlay)
+            .padding()
+            .background(Color.white)
+            .cornerRadius(10)
+            .padding(.horizontal)
     }
     var uploadButton: some View {
         PhotosPicker(selection: $selectedItem,
