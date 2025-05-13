@@ -13,7 +13,7 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             if let user = authViewModel.user {
-                ProfileView(userEmail: user.email ?? "")
+                PhotoEditorView(userEmail: user.email ?? "")
             } else {
                 LoginView()
             }

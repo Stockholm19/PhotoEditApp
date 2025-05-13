@@ -9,15 +9,21 @@ import SwiftUI
 import FirebaseAuth
 import PhotosUI
 
-struct ProfileView: View {
+struct PhotoEditorView: View {
     let userEmail: String
     @EnvironmentObject var authViewModel: AuthViewModel
     @State private var selectedItem: PhotosPickerItem? = nil
+    
+    @State private var currentScale: CGFloat = 1.0
+    @State private var finalScale: CGFloat = 1.0
+    @State private var currentRotation: Angle = .zero
+    @State private var finalRotation: Angle = .zero
+    
     @AppStorage("profileImageData") private var profileImageBase64: String = ""
 
     var body: some View {
         VStack(spacing: 20) {
-            avatarImage
+            editableImage
             uploadButton
             deleteButton
 
@@ -38,14 +44,17 @@ struct ProfileView: View {
 
 // MARK: - Subviews
 
-private extension ProfileView {
+private extension PhotoEditorView {
     var header: some View {
-        Text("👤 Добро пожаловать")
+        Text("PhotoEditApp")
             .font(.largeTitle)
+            .bold()
     }
 
     var emailText: some View {
         Text("Email: \(userEmail)")
+            .font(.caption)
+            .foregroundColor(.gray)
     }
 
     var signOutButton: some View {
@@ -63,26 +72,46 @@ private extension ProfileView {
         .cornerRadius(10)
     }
     
-    var avatarImage: some View {
+    var editableImage: some View {
         Group {
             if let data = profileImageData,
                let uiImage = UIImage(data: data) {
                 Image(uiImage: uiImage)
                     .resizable()
-                    .scaledToFill()
-                    .frame(width: 120, height: 120)
-                    .clipShape(Circle())
+                    .scaledToFit()
+                    .frame(maxWidth: 300, maxHeight: 300)
                     .shadow(radius: 5)
+                    .scaleEffect(currentScale * finalScale)
+                    .rotationEffect(currentRotation + finalRotation)
+                    .gesture(
+                        MagnificationGesture()
+                            .onChanged { value in
+                                currentScale = value
+                            }
+                            .onEnded { value in
+                                finalScale *= value
+                                currentScale = 1.0
+                            }
+                            .simultaneously(with:
+                                RotationGesture()
+                                    .onChanged { angle in
+                                        currentRotation = angle
+                                    }
+                                    .onEnded { angle in
+                                        finalRotation += angle
+                                        currentRotation = .zero
+                                    }
+                            )
+                    )
             } else {
-                Image(systemName: "person.crop.circle.fill")
+                Image(systemName: "photo")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 120, height: 120)
+                    .frame(maxWidth: 300, maxHeight: 300)
                     .foregroundColor(.gray)
             }
         }
     }
-    
     var uploadButton: some View {
         PhotosPicker(selection: $selectedItem,
                      matching: .images,
@@ -110,6 +139,6 @@ private extension ProfileView {
 }
 
 #Preview {
-    ProfileView(userEmail: "preview@example.com")
+    PhotoEditorView(userEmail: "preview@example.com")
         .environmentObject(AuthViewModel())
 }
