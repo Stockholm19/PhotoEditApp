@@ -17,20 +17,18 @@ class AuthViewModel: ObservableObject {
         self.user = Auth.auth().currentUser
     }
 
-    func signUp(email: String,
-                password: String,
-                completion: @escaping (Result<Void, AuthErrorCode>) -> Void) {
+    func signUp(email: String, password: String, completion: @escaping (Result<Void, AuthErrorCode>) -> Void) {
         errorMessage = nil
-        Auth.auth().createUser(withEmail: email, password: password) { result, error in
+
+        AuthService.shared.createUser(email: email, password: password) { result in
             DispatchQueue.main.async {
-                if let error = error {
-                    let nsError = error as NSError
-                    let code = AuthErrorCode(rawValue: nsError.code)
-                    self.errorMessage = code?.friendlyMessage
-                    completion(.failure(code ?? .internalError))
-                } else if let user = result?.user {
+                switch result {
+                case .success(let user):
                     self.user = user
                     completion(.success(()))
+                case .failure(let code):
+                    self.errorMessage = code.friendlyMessage
+                    completion(.failure(code))
                 }
             }
         }
@@ -38,23 +36,19 @@ class AuthViewModel: ObservableObject {
 
     func signIn(email: String, password: String) {
         errorMessage = nil
-        Auth.auth().signIn(withEmail: email, password: password) { result, error in
+
+        AuthService.shared.signIn(email: email, password: password) { result in
             DispatchQueue.main.async {
-                if let error = error {
-                    let nsError = error as NSError
-                    let code = AuthErrorCode(rawValue: nsError.code)
-                    self.errorMessage = code?.friendlyMessage
-                } else if let user = result?.user {
+                switch result {
+                case .success(let user):
                     self.user = user
+                case .failure(let code):
+                    self.errorMessage = code.friendlyMessage
                 }
             }
         }
     }
-    
-    
-
 }
-
 
 extension AuthErrorCode {
     var friendlyMessage: String {
