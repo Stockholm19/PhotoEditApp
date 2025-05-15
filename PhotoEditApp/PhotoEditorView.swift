@@ -22,15 +22,18 @@ struct PhotoEditorView: View {
     @State private var textOverlay: String = ""
     @State private var textPosition = CGSize.zero
     
+    @State private var showSaveAlert = false
+    
     @AppStorage("profileImageData") private var profileImageBase64: String = ""
 
     var body: some View {
         VStack(spacing: 20) {
-            editableImage
+            imageCanvas
             textInputField
             
             uploadButton
             deleteButton
+            saveButton
 
             header
             emailText
@@ -75,6 +78,14 @@ private extension PhotoEditorView {
         .background(Color.red)
         .foregroundColor(.white)
         .cornerRadius(10)
+    }
+    
+    var imageCanvas: some View {
+        ZStack {
+            editableImage
+        }
+        .frame(maxWidth: 300, maxHeight: 300)
+        .background(Color.white)
     }
     
     var editableImage: some View {
@@ -160,6 +171,20 @@ private extension PhotoEditorView {
         .foregroundColor(.white)
         .background(Color.gray)
         .cornerRadius(10)
+    }
+    var saveButton: some View {
+        Button("Сохранить изображение") {
+                let snapshot = editableImage.snapshot()
+                UIImageWriteToSavedPhotosAlbum(snapshot, nil, nil, nil)
+                showSaveAlert = true
+            }
+            .padding()
+            .background(Color.green)
+            .foregroundColor(.white)
+            .cornerRadius(10)
+            .alert("✅ Сохранено", isPresented: $showSaveAlert) {
+                Button("ОК", role: .cancel) { }
+            }
     }
     
     private var profileImageData: Data? {
