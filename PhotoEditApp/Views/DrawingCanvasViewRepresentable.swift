@@ -8,9 +8,15 @@
 import SwiftUI
 import PencilKit
 
+class CanvasViewWrapper: ObservableObject {
+    @Published var canvasView = PKCanvasView()
+}
+
 struct DrawingCanvasView: UIViewRepresentable {
+    @ObservedObject var wrapper: CanvasViewWrapper
+
     func makeUIView(context: Context) -> PKCanvasView {
-        let canvasView = PKCanvasView()
+        let canvasView = wrapper.canvasView
         canvasView.drawingPolicy = .anyInput
         canvasView.tool = PKInkingTool(.pen, color: .black, width: 5)
         canvasView.backgroundColor = .white

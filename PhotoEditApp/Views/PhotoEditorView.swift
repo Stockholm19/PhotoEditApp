@@ -29,28 +29,31 @@ struct PhotoEditorView: View {
     @AppStorage("profileImageData") private var profileImageBase64: String = ""
 
     var body: some View {
-        VStack(spacing: 20) {
-            imageCanvas
-            textInputField
-            
-            VStack(spacing: 12) {
-                uploadButton
-                deleteButton
-                drawingToggleButton
-                drawingCanvas
-                saveButton
+        ScrollView {
+            VStack(spacing: 20) {
+                imageCanvas
+                textInputField
+                
+                VStack(spacing: 12) {
+                    resetButton
+                    uploadButton
+                    deleteButton
+                    drawingToggleButton
+                    drawingCanvas
+                    saveButton
+                }
+                .frame(maxWidth: 300)
+                
+                header
+                emailText
+                signOutButton
             }
-            .frame(maxWidth: 300)
-
-            header
-            emailText
-            signOutButton
-        }
-        .padding()
-        .onChange(of: selectedItem) { _, newItem in
-            Task {
-                if let data = try? await newItem?.loadTransferable(type: Data.self) {
-                    profileImageBase64 = data.base64EncodedString()
+            .padding()
+            .onChange(of: selectedItem) { _, newItem in
+                Task {
+                    if let data = try? await newItem?.loadTransferable(type: Data.self) {
+                        profileImageBase64 = data.base64EncodedString()
+                    }
                 }
             }
         }
@@ -64,6 +67,20 @@ private extension PhotoEditorView {
         Text("PhotoEditApp")
             .font(.largeTitle)
             .bold()
+    }
+    
+    var resetButton: some View {
+        Button("Сбросить изменения") {
+            currentScale = 1.0
+            finalScale = 1.0
+            currentRotation = .zero
+            finalRotation = .zero
+            textPosition = .zero
+        }
+        .padding()
+        .frame(maxWidth: .infinity)
+        .background(Color(.systemGray6))
+        .cornerRadius(10)
     }
 
     var emailText: some View {
@@ -108,7 +125,7 @@ private extension PhotoEditorView {
     var drawingCanvas: some View {
         Group {
             if showDrawingCanvas {
-                DrawingCanvasView()
+                DrawingCanvasView(wrapper: CanvasViewWrapper())
                     .frame(height: 300)
                     .cornerRadius(12)
                     .shadow(radius: 5)

@@ -22,8 +22,6 @@ struct ContentView: View {
 }
 
 #Preview {
-    NavigationStack {
-        ContentView()
-            .environmentObject(AuthViewModel())
-    }
+    ContentView()
+        .environmentObject(AuthViewModel())
 }
