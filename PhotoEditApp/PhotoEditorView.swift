@@ -24,6 +24,8 @@ struct PhotoEditorView: View {
     
     @State private var showSaveAlert = false
     
+    @State private var showDrawingCanvas = false
+    
     @AppStorage("profileImageData") private var profileImageBase64: String = ""
 
     var body: some View {
@@ -31,9 +33,14 @@ struct PhotoEditorView: View {
             imageCanvas
             textInputField
             
-            uploadButton
-            deleteButton
-            saveButton
+            VStack(spacing: 12) {
+                uploadButton
+                deleteButton
+                drawingToggleButton
+                drawingCanvas
+                saveButton
+            }
+            .frame(maxWidth: 300)
 
             header
             emailText
@@ -86,6 +93,27 @@ private extension PhotoEditorView {
         }
         .frame(maxWidth: 300, maxHeight: 300)
         .background(Color.white)
+    }
+    
+    var drawingToggleButton: some View {
+        Button("Рисование") {
+            showDrawingCanvas.toggle()
+        }
+        .padding()
+        .frame(maxWidth: .infinity)
+        .background(Color.orange)
+        .foregroundColor(.white)
+        .cornerRadius(10)
+    }
+    var drawingCanvas: some View {
+        Group {
+            if showDrawingCanvas {
+                DrawingCanvasView()
+                    .frame(height: 300)
+                    .cornerRadius(12)
+                    .shadow(radius: 5)
+            }
+        }
     }
     
     var editableImage: some View {
@@ -145,6 +173,7 @@ private extension PhotoEditorView {
             }
         }
     }
+    
     var textInputField: some View {
         TextField("Введите текст", text: $textOverlay)
             .padding()
@@ -158,6 +187,7 @@ private extension PhotoEditorView {
                      photoLibrary: .shared()) {
             Text("Выбрать изображение")
                 .padding()
+                .frame(maxWidth: .infinity)
                 .background(Color.blue)
                 .foregroundColor(.white)
                 .cornerRadius(10)
@@ -168,6 +198,7 @@ private extension PhotoEditorView {
             profileImageBase64 = ""
         }
         .padding()
+        .frame(maxWidth: .infinity)
         .foregroundColor(.white)
         .background(Color.gray)
         .cornerRadius(10)
@@ -179,6 +210,7 @@ private extension PhotoEditorView {
                 showSaveAlert = true
             }
             .padding()
+            .frame(maxWidth: .infinity)
             .background(Color.green)
             .foregroundColor(.white)
             .cornerRadius(10)
@@ -196,3 +228,4 @@ private extension PhotoEditorView {
     PhotoEditorView(userEmail: "preview@example.com")
         .environmentObject(AuthViewModel())
 }
+    
