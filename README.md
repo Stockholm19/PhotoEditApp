@@ -43,11 +43,15 @@
 
 ## 🚀 Установка
 
-1. Склонируйте репозиторий  
-2. Откройте `.xcodeproj` в **Xcode 15**  
-3. Настройте Firebase и добавьте `GoogleService-Info.plist` в корень проекта  
+1. Склонируйте репозиторий
+2. Откройте `.xcodeproj` в **Xcode 15 или выше** 
+3. Настройте Firebase:
+   - Перейдите в [Firebase Console](https://console.firebase.google.com/)
+   - Откройте ⚙️ **Project Settings** → вкладка **iOS**
+   - Нажмите **Download `GoogleService-Info.plist`**
+   - Скопируйте файл в папку `PhotoEditApp/Services/`  
+     ⚠️ Этот файл содержит ключи и **не входит в репозиторий**
 4. Соберите и запустите на устройстве или симуляторе
-
 ---
 
 ## 🔧 Планы по доработке
@@ -121,11 +125,15 @@ It was developed as a test project using **SwiftUI**, **Firebase**, and the **MV
 
 ## 🚀 Installation
 
-1. Clone the repository  
-2. Open `.xcodeproj` in **Xcode 15**  
-3. Set up Firebase and add `GoogleService-Info.plist`  
-4. Build and run on a real device or simulator
-
+1. Clone the repository
+2. Open `.xcodeproj` in **Xcode 15 or later**
+3. Set up Firebase:
+   - Go to [Firebase Console](https://console.firebase.google.com/)
+   - Open ⚙️ **Project Settings** → **iOS** tab
+   - Click **Download `GoogleService-Info.plist`**
+   - Move the file to `PhotoEditApp/Services/`  
+     ⚠️ This file contains secrets and is **excluded from the repository**
+4. Build and run on a device or simulator
 ---
 
 ## 🔧 Future Improvements
