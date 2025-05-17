@@ -6,9 +6,12 @@
 //
 
 import Foundation
-import FirebaseAuth
+@preconcurrency import FirebaseAuth
 import Combine
+import GoogleSignIn
+import UIKit
 
+@MainActor
 class AuthViewModel: ObservableObject {
     @Published var user: User? = nil
     @Published var errorMessage: String?
@@ -46,6 +49,30 @@ class AuthViewModel: ObservableObject {
                     self.errorMessage = code.friendlyMessage
                 }
             }
+        }
+    }
+
+    func signInWithGoogle() async {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let rootViewController = windowScene.windows.first?.rootViewController else { return }
+
+        do {
+            let userAuth = try await GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController)
+            guard let idToken = userAuth.user.idToken?.tokenString else { return }
+
+            let credential = GoogleAuthProvider.credential(withIDToken: idToken,
+                                                           accessToken: userAuth.user.accessToken.tokenString)
+
+            let result = try await Auth.auth().signIn(with: credential)
+            DispatchQueue.main.async { [weak self] in
+                self?.user = result.user
+                self?.errorMessage = nil
+            }
+        } catch {
+            DispatchQueue.main.async { [weak self] in
+                self?.errorMessage = "Не удалось войти через Google"
+            }
+            print("Google Sign-In error:", error)
         }
     }
 }

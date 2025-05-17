@@ -7,6 +7,7 @@
 
 import SwiftUI
 import UIKit
+import GoogleSignInSwift
 
 /// Простая геометрическая анимация «shake»
 struct Shake: GeometryEffect {
@@ -119,6 +120,13 @@ private extension LoginView {
 
     var linksSection: some View {
         VStack(spacing: 10) {
+            GoogleSignInButton {
+                Task {
+                    await authViewModel.signInWithGoogle()
+                }
+            }
+            .frame(height: 50)
+            
             NavigationLink("Забыли пароль?") {
                 ResetPasswordView()
             }

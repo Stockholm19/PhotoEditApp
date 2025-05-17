@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8808EB582DD80C9400C22BF8 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8808EB572DD80C9400C22BF8 /* GoogleSignInSwift */; };
 		885FD2502DC853D70053FAFA /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 885FD24F2DC853D70053FAFA /* FirebaseAnalytics */; };
 		88EC94512DC9AC69006227ED /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 88EC94502DC9AC69006227ED /* FirebaseAuth */; };
 		88EC94532DC9AC69006227ED /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 88EC94522DC9AC69006227ED /* FirebaseCore */; };
@@ -16,9 +17,22 @@
 		882AA4802DC3A4E200F8714F /* PhotoEditApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoEditApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		8808EB5C2DD8153300C22BF8 /* Exceptions for "PhotoEditApp" folder in "PhotoEditApp" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 882AA47F2DC3A4E200F8714F /* PhotoEditApp */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		882AA4822DC3A4E200F8714F /* PhotoEditApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				8808EB5C2DD8153300C22BF8 /* Exceptions for "PhotoEditApp" folder in "PhotoEditApp" target */,
+			);
 			path = PhotoEditApp;
 			sourceTree = "<group>";
 		};
@@ -32,6 +46,7 @@
 				885FD2502DC853D70053FAFA /* FirebaseAnalytics in Frameworks */,
 				88EC94532DC9AC69006227ED /* FirebaseCore in Frameworks */,
 				88EC94512DC9AC69006227ED /* FirebaseAuth in Frameworks */,
+				8808EB582DD80C9400C22BF8 /* GoogleSignInSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,6 +92,7 @@
 				885FD24F2DC853D70053FAFA /* FirebaseAnalytics */,
 				88EC94502DC9AC69006227ED /* FirebaseAuth */,
 				88EC94522DC9AC69006227ED /* FirebaseCore */,
+				8808EB572DD80C9400C22BF8 /* GoogleSignInSwift */,
 			);
 			productName = PhotoEditApp;
 			productReference = 882AA4802DC3A4E200F8714F /* PhotoEditApp.app */;
@@ -108,6 +124,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				885FD24E2DC853D70053FAFA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				8808EB562DD80C9400C22BF8 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 882AA4812DC3A4E200F8714F /* Products */;
@@ -272,6 +289,7 @@
 				DEVELOPMENT_TEAM = PYDBUVKJ9J;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PhotoEditApp/Info.plist;
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Приложению нужно разрешение для сохранения изображений в Фотоальбом.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -303,6 +321,7 @@
 				DEVELOPMENT_TEAM = PYDBUVKJ9J;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PhotoEditApp/Info.plist;
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Приложению нужно разрешение для сохранения изображений в Фотоальбом.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -347,6 +366,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		8808EB562DD80C9400C22BF8 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
 		885FD24E2DC853D70053FAFA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
@@ -358,6 +385,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		8808EB572DD80C9400C22BF8 /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8808EB562DD80C9400C22BF8 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
+		};
 		885FD24F2DC853D70053FAFA /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 885FD24E2DC853D70053FAFA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
