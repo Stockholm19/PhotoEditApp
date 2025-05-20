@@ -25,6 +25,7 @@ struct PhotoEditorView: View {
     @State private var showSaveAlert = false
     
     @State private var showDrawingCanvas = false
+    @StateObject private var canvasWrapper = CanvasViewWrapper()
     
     @AppStorage("profileImageData") private var profileImageBase64: String = ""
     @State private var originalImageData: Data? = nil
@@ -44,7 +45,6 @@ struct PhotoEditorView: View {
                     uploadButton
                     deleteButton
                     drawingToggleButton
-                    drawingCanvas
                     saveButton
                 }
                 .frame(maxWidth: 300)
@@ -147,6 +147,7 @@ private extension PhotoEditorView {
             currentRotation = .zero
             finalRotation = .zero
             textPosition = .zero
+            canvasWrapper.clear()
         }
         .padding()
         .frame(maxWidth: .infinity)
@@ -178,6 +179,12 @@ private extension PhotoEditorView {
     var imageCanvas: some View {
         ZStack {
             editableImage
+            if showDrawingCanvas {
+                DrawingCanvasView(wrapper: canvasWrapper)
+                    .background(Color.clear)
+                    .frame(maxWidth: 300, maxHeight: 300)
+                    .allowsHitTesting(true)
+            }
         }
         .frame(maxWidth: 300, maxHeight: 300)
         .background(Color.white)
@@ -192,16 +199,6 @@ private extension PhotoEditorView {
         .background(Color.orange)
         .foregroundColor(.white)
         .cornerRadius(10)
-    }
-    var drawingCanvas: some View {
-        Group {
-            if showDrawingCanvas {
-                DrawingCanvasView(wrapper: CanvasViewWrapper())
-                    .frame(height: 300)
-                    .cornerRadius(12)
-                    .shadow(radius: 5)
-            }
-        }
     }
     
     var editableImage: some View {
@@ -293,18 +290,20 @@ private extension PhotoEditorView {
     }
     var saveButton: some View {
         Button("Сохранить изображение") {
-                let snapshot = editableImage.snapshot()
-                UIImageWriteToSavedPhotosAlbum(snapshot, nil, nil, nil)
+            let base = editableImage.snapshot().resize(to: CGSize(width: 300, height: 300))
+            if let combined = canvasWrapper.renderedImage(size: base.size, base: base) {
+                UIImageWriteToSavedPhotosAlbum(combined, nil, nil, nil)
                 showSaveAlert = true
             }
-            .padding()
-            .frame(maxWidth: .infinity)
-            .background(Color.green)
-            .foregroundColor(.white)
-            .cornerRadius(10)
-            .alert("✅ Сохранено", isPresented: $showSaveAlert) {
-                Button("ОК", role: .cancel) { }
-            }
+        }
+        .padding()
+        .frame(maxWidth: .infinity)
+        .background(Color.green)
+        .foregroundColor(.white)
+        .cornerRadius(10)
+        .alert("✅ Сохранено", isPresented: $showSaveAlert) {
+            Button("ОК", role: .cancel) { }
+        }
     }
     
     private var profileImageData: Data? {
