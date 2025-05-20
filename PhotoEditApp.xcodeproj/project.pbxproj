@@ -13,8 +13,19 @@
 		88EC94532DC9AC69006227ED /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 88EC94522DC9AC69006227ED /* FirebaseCore */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		88A455582DDD32380014635E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 882AA4782DC3A4E200F8714F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 882AA47F2DC3A4E200F8714F;
+			remoteInfo = PhotoEditApp;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		882AA4802DC3A4E200F8714F /* PhotoEditApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoEditApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		88A455542DDD32380014635E /* PhotoEditAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PhotoEditAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -36,6 +47,11 @@
 			path = PhotoEditApp;
 			sourceTree = "<group>";
 		};
+		88A455552DDD32380014635E /* PhotoEditAppTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = PhotoEditAppTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +66,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		88A455512DDD32380014635E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -57,6 +80,7 @@
 			isa = PBXGroup;
 			children = (
 				882AA4822DC3A4E200F8714F /* PhotoEditApp */,
+				88A455552DDD32380014635E /* PhotoEditAppTests */,
 				882AA4812DC3A4E200F8714F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -65,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				882AA4802DC3A4E200F8714F /* PhotoEditApp.app */,
+				88A455542DDD32380014635E /* PhotoEditAppTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -98,6 +123,29 @@
 			productReference = 882AA4802DC3A4E200F8714F /* PhotoEditApp.app */;
 			productType = "com.apple.product-type.application";
 		};
+		88A455532DDD32380014635E /* PhotoEditAppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 88A4555A2DDD32380014635E /* Build configuration list for PBXNativeTarget "PhotoEditAppTests" */;
+			buildPhases = (
+				88A455502DDD32380014635E /* Sources */,
+				88A455512DDD32380014635E /* Frameworks */,
+				88A455522DDD32380014635E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				88A455592DDD32380014635E /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				88A455552DDD32380014635E /* PhotoEditAppTests */,
+			);
+			name = PhotoEditAppTests;
+			packageProductDependencies = (
+			);
+			productName = PhotoEditAppTests;
+			productReference = 88A455542DDD32380014635E /* PhotoEditAppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -110,6 +158,11 @@
 				TargetAttributes = {
 					882AA47F2DC3A4E200F8714F = {
 						CreatedOnToolsVersion = 16.3;
+					};
+					88A455532DDD32380014635E = {
+						CreatedOnToolsVersion = 16.3;
+						LastSwiftMigration = 1630;
+						TestTargetID = 882AA47F2DC3A4E200F8714F;
 					};
 				};
 			};
@@ -132,12 +185,20 @@
 			projectRoot = "";
 			targets = (
 				882AA47F2DC3A4E200F8714F /* PhotoEditApp */,
+				88A455532DDD32380014635E /* PhotoEditAppTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		882AA47E2DC3A4E200F8714F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		88A455522DDD32380014635E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -154,7 +215,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		88A455502DDD32380014635E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		88A455592DDD32380014635E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 882AA47F2DC3A4E200F8714F /* PhotoEditApp */;
+			targetProxy = 88A455582DDD32380014635E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		882AA4892DC3A4E300F8714F /* Debug */ = {
@@ -342,6 +418,45 @@
 			};
 			name = Release;
 		};
+		88A4555B2DDD32380014635E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PYDBUVKJ9J;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = r.pshenichnikov.PhotoEditAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PhotoEditApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PhotoEditApp";
+			};
+			name = Debug;
+		};
+		88A4555C2DDD32380014635E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PYDBUVKJ9J;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = r.pshenichnikov.PhotoEditAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PhotoEditApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PhotoEditApp";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -359,6 +474,15 @@
 			buildConfigurations = (
 				882AA48C2DC3A4E300F8714F /* Debug */,
 				882AA48D2DC3A4E300F8714F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		88A4555A2DDD32380014635E /* Build configuration list for PBXNativeTarget "PhotoEditAppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				88A4555B2DDD32380014635E /* Debug */,
+				88A4555C2DDD32380014635E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
