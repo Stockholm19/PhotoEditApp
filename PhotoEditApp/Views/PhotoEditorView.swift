@@ -31,6 +31,9 @@ struct PhotoEditorView: View {
     @State private var originalImageData: Data? = nil
     
     @State private var currentFilter: ImageFilterType? = nil
+    
+    @State private var showShareSheet = false
+    @State private var imageToShare: UIImage?
 
     var body: some View {
         ScrollView {
@@ -45,7 +48,9 @@ struct PhotoEditorView: View {
                     uploadButton
                     deleteButton
                     drawingToggleButton
+                    
                     saveButton
+                    shareButton
                 }
                 .frame(maxWidth: 300)
                 
@@ -61,6 +66,11 @@ struct PhotoEditorView: View {
                         originalImageData = data
                         currentFilter = nil
                     }
+                }
+            }
+            .sheet(isPresented: $showShareSheet) {
+                if let image = imageToShare {
+                    ShareSheet(activityItems: [image])
                 }
             }
         }
@@ -306,6 +316,21 @@ private extension PhotoEditorView {
         }
     }
     
+    var shareButton: some View {
+        Button("Поделиться") {
+            let base = editableImage.snapshot().resize(to: CGSize(width: 300, height: 300))
+            if let finalImage = canvasWrapper.renderedImage(size: base.size, base: base) {
+                imageToShare = finalImage
+                showShareSheet = true
+            }
+        }
+        .padding()
+        .frame(maxWidth: .infinity)
+        .background(Color.cyan)
+        .foregroundColor(.white)
+        .cornerRadius(10)
+    }
+    
     private var profileImageData: Data? {
         Data(base64Encoded: profileImageBase64)
     }
@@ -314,4 +339,14 @@ private extension PhotoEditorView {
 #Preview {
     PhotoEditorView(userEmail: "preview@example.com")
         .environmentObject(AuthViewModel())
+}
+
+struct ShareSheet: UIViewControllerRepresentable {
+    let activityItems: [Any]
+
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+    }
+
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
