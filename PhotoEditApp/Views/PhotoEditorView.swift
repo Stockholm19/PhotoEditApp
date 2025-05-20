@@ -27,12 +27,17 @@ struct PhotoEditorView: View {
     @State private var showDrawingCanvas = false
     
     @AppStorage("profileImageData") private var profileImageBase64: String = ""
+    @State private var originalImageData: Data? = nil
+    
+    @State private var currentFilter: ImageFilterType? = nil
 
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
                 imageCanvas
                 textInputField
+                
+                filterButtons
                 
                 VStack(spacing: 12) {
                     resetButton
@@ -53,6 +58,8 @@ struct PhotoEditorView: View {
                 Task {
                     if let data = try? await newItem?.loadTransferable(type: Data.self) {
                         profileImageBase64 = data.base64EncodedString()
+                        originalImageData = data
+                        currentFilter = nil
                     }
                 }
             }
@@ -60,9 +67,73 @@ struct PhotoEditorView: View {
     }
 }
 
+enum ImageFilterType {
+    case sepia, mono, blur
+}
+
+struct FilterButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .padding(8)
+            .frame(maxWidth: .infinity)
+            .background(Color.purple.opacity(configuration.isPressed ? 0.7 : 1))
+            .foregroundColor(.white)
+            .cornerRadius(10)
+    }
+}
+
 // MARK: - Subviews
 
 private extension PhotoEditorView {
+    
+    var filterButtons: some View {
+        HStack {
+            Button("Сепия") {
+                self.applyFilter(type: .sepia)
+            }
+            .buttonStyle(FilterButtonStyle())
+
+            Button("Ч/Б") {
+                self.applyFilter(type: .mono)
+            }
+            .buttonStyle(FilterButtonStyle())
+
+            Button("Блюр") {
+                self.applyFilter(type: .blur)
+            }
+            .buttonStyle(FilterButtonStyle())
+        }
+    }
+    
+    func applyFilter(type: ImageFilterType) {
+        if currentFilter == type {
+            currentFilter = nil
+            if let originalData = originalImageData {
+                profileImageBase64 = originalData.base64EncodedString()
+            }
+            return
+        }
+        guard let data = profileImageData,
+              let uiImage = UIImage(data: data) else { return }
+
+        let service = ImageFilterService()
+        let filteredImage: UIImage?
+
+        switch type {
+        case .sepia:
+            filteredImage = service.applySepia(to: uiImage)
+        case .mono:
+            filteredImage = service.applyMono(to: uiImage)
+        case .blur:
+            filteredImage = service.applyBlur(to: uiImage)
+        }
+
+        if let image = filteredImage, let newData = image.pngData() {
+            profileImageBase64 = newData.base64EncodedString()
+            currentFilter = type
+        }
+    }
+    
     var header: some View {
         Text("PhotoEditApp")
             .font(.largeTitle)
@@ -245,4 +316,3 @@ private extension PhotoEditorView {
     PhotoEditorView(userEmail: "preview@example.com")
         .environmentObject(AuthViewModel())
 }
-    
