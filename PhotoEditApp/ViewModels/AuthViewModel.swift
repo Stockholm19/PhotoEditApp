@@ -20,35 +20,30 @@ class AuthViewModel: ObservableObject {
         self.user = Auth.auth().currentUser
     }
 
-    func signUp(email: String, password: String, completion: @escaping (Result<Void, AuthErrorCode>) -> Void) {
+    func signUp(email: String, password: String) async -> Result<Void, AuthErrorCode> {
         errorMessage = nil
-
-        AuthService.shared.createUser(email: email, password: password) { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let user):
-                    self.user = user
-                    completion(.success(()))
-                case .failure(let code):
-                    self.errorMessage = code.friendlyMessage
-                    completion(.failure(code))
-                }
-            }
+        do {
+            let user = try await AuthService.shared.createUser(email: email, password: password)
+            self.user = user
+            return .success(())
+        } catch let error as AuthErrorCode {
+            self.errorMessage = error.friendlyMessage
+            return .failure(error)
+        } catch {
+            self.errorMessage = "Неизвестная ошибка"
+            return .failure(.internalError)
         }
     }
 
-    func signIn(email: String, password: String) {
+    func signIn(email: String, password: String) async {
         errorMessage = nil
-
-        AuthService.shared.signIn(email: email, password: password) { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let user):
-                    self.user = user
-                case .failure(let code):
-                    self.errorMessage = code.friendlyMessage
-                }
-            }
+        do {
+            let user = try await AuthService.shared.signIn(email: email, password: password)
+            self.user = user
+        } catch let error as AuthErrorCode {
+            self.errorMessage = error.friendlyMessage
+        } catch {
+            self.errorMessage = "Неизвестная ошибка"
         }
     }
 

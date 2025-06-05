@@ -82,7 +82,6 @@ struct SignUpView: View {
 
     private var signUpButton: some View {
         Button("Готово") {
-            // сбрасываем возможное предыдущее состояние
             emailAlreadyExists = false
 
             if email.isEmpty || password.isEmpty || confirmPassword.isEmpty {
@@ -91,7 +90,8 @@ struct SignUpView: View {
                 errorMessage = "Пароли не совпадают"
             } else {
                 errorMessage = ""
-                authViewModel.signUp(email: email, password: password) { result in
+                Task {
+                    let result = await authViewModel.signUp(email: email, password: password)
                     switch result {
                     case .success:
                         isShowingSuccess = true

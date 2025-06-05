@@ -31,7 +31,8 @@ struct LoginView: View {
     
     @State private var email: String = ""
     @State private var password: String = ""
-    @State private var errorMessage: String = ""
+    
+    @State private var localErrorMessage: String = ""
     @State private var wrongAttempts: Int = 0
     
     var body: some View {
@@ -40,17 +41,24 @@ struct LoginView: View {
             emailField
             passwordField
 
-            errorMessageView
+            if !localErrorMessage.isEmpty {
+                Text(localErrorMessage)
+                    .foregroundColor(.red)
+                    .multilineTextAlignment(.center)
+            }
             
             signInButton
             
             linksSection
         }
-        .onChange(of: authViewModel.errorMessage) {
-            guard let message = authViewModel.errorMessage, !message.isEmpty else { return }
-            errorMessage = "Неправильный логин или пароль."
-            withAnimation { wrongAttempts += 1 }
-            UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
+        .onChange(of: authViewModel.errorMessage) { oldValue, newValue in
+            if let newMessageFromVM = newValue, !newMessageFromVM.isEmpty {
+                localErrorMessage = newMessageFromVM
+                withAnimation { wrongAttempts += 1 }
+                UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
+            } else if newValue == nil || newValue?.isEmpty == true {
+                localErrorMessage = ""
+            }
         }
         .padding()
     }
@@ -84,31 +92,25 @@ private extension LoginView {
             .modifier(Shake(animatableData: CGFloat(wrongAttempts)))
     }
 
-    var errorMessageView: some View {
-        Group {
-            if !errorMessage.isEmpty {
-                Text(errorMessage)
-                    .foregroundColor(.red)
-            }
-        }
-    }
-
     var signInButton: some View {
         Button("Войти") {
             UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+            localErrorMessage = ""
+            
             if email.trimmingCharacters(in: .whitespaces).isEmpty ||
                 password.trimmingCharacters(in: .whitespaces).isEmpty {
-                errorMessage = "Пожалуйста, заполните все поля."
+                localErrorMessage = "Пожалуйста, заполните все поля."
                 withAnimation { wrongAttempts += 1 }
             } else if !email.contains("@") {
-                errorMessage = "Некорректный email."
+                localErrorMessage = "Некорректный email."
                 withAnimation { wrongAttempts += 1 }
             } else if password.count < 6 {
-                errorMessage = "Пароль должен содержать минимум 6 символов."
+                localErrorMessage = "Пароль должен содержать минимум 6 символов."
                 withAnimation { wrongAttempts += 1 }
             } else {
-                errorMessage = ""
-                authViewModel.signIn(email: email, password: password)
+                Task {
+                    await authViewModel.signIn(email: email, password: password)
+                }
             }
         }
         .padding()
@@ -122,6 +124,7 @@ private extension LoginView {
         VStack(spacing: 10) {
             GoogleSignInButton {
                 Task {
+                    localErrorMessage = ""
                     await authViewModel.signInWithGoogle()
                 }
             }
