@@ -35,43 +35,76 @@ struct PhotoEditorView: View {
     @State private var showShareSheet = false
     @State private var imageToShare: UIImage?
 
+
     var body: some View {
         ScrollView {
-            VStack(spacing: 20) {
+            VStack(spacing: 24) {
                 imageCanvas
                 textInputField
-                
-                filterButtons
-                
-                VStack(spacing: 12) {
-                    resetButton
-                    uploadButton
-                    deleteButton
-                    drawingToggleButton
-                    
-                    saveButton
-                    shareButton
-                }
-                .frame(maxWidth: 300)
-                
-                header
-                emailText
-                signOutButton
+                editingSection
+                imageSection
+                infoSection
             }
             .padding()
-            .onChange(of: selectedItem) { _, newItem in
-                Task {
-                    if let data = try? await newItem?.loadTransferable(type: Data.self) {
-                        profileImageBase64 = data.base64EncodedString()
-                        originalImageData = data
-                        currentFilter = nil
-                    }
-                }
+            .task(id: selectedItem) {
+                handleImageSelection(selectedItem)
             }
-            .sheet(isPresented: $showShareSheet) {
-                if let image = imageToShare {
-                    ShareSheet(activityItems: [image])
+            .sheet(isPresented: $showShareSheet, content: shareSheet)
+            .alert("✅ Сохранено", isPresented: $showSaveAlert) {
+                Button("ОК", role: .cancel) { }
+            }
+            .toolbar { toolbarMenu }
+        }
+    }
+}
+
+// MARK: - Logic
+private extension PhotoEditorView {
+    
+    func handleImageSelection(_ newItem: PhotosPickerItem?) {
+        Task {
+            if let data = try? await newItem?.loadTransferable(type: Data.self) {
+                profileImageBase64 = data.base64EncodedString()
+                originalImageData = data
+                currentFilter = nil
+            }
+        }
+    }
+
+    func shareSheet() -> some View {
+        Group {
+            if let image = imageToShare {
+                ShareSheet(activityItems: [image])
+            }
+        }
+    }
+    
+    var toolbarMenu: some ToolbarContent {
+        ToolbarItem(placement: .navigationBarTrailing) {
+            Menu {
+                Button {
+                    let base = editableImage.snapshot().resize(to: CGSize(width: 300, height: 300))
+                    if let combined = canvasWrapper.renderedImage(size: base.size, base: base) {
+                        UIImageWriteToSavedPhotosAlbum(combined, nil, nil, nil)
+                        showSaveAlert = true
+                    }
+                } label: {
+                    Label("Сохранить изображение", systemImage: "square.and.arrow.down")
                 }
+
+                Button {
+                    let base = editableImage.snapshot().resize(to: CGSize(width: 300, height: 300))
+                    if let finalImage = canvasWrapper.renderedImage(size: base.size, base: base) {
+                        imageToShare = finalImage
+                        showShareSheet = true
+                    }
+                } label: {
+                    Label("Поделиться", systemImage: "square.and.arrow.up")
+                }
+
+            } label: {
+                Image(systemName: "ellipsis.circle")
+                    .imageScale(.large)
             }
         }
     }
@@ -116,6 +149,7 @@ private extension PhotoEditorView {
     }
     
     func applyFilter(type: ImageFilterType) {
+        // Если нажимаю тот же фильтр — он сбрасывается
         if currentFilter == type {
             currentFilter = nil
             if let originalData = originalImageData {
@@ -123,8 +157,10 @@ private extension PhotoEditorView {
             }
             return
         }
-        guard let data = profileImageData,
-              let uiImage = UIImage(data: data) else { return }
+
+        // Иначе применяем новый фильтр — на ОРИГИНАЛ
+        guard let originalData = originalImageData,
+              let uiImage = UIImage(data: originalData) else { return }
 
         let service = ImageFilterService()
         let filteredImage: UIImage?
@@ -151,18 +187,17 @@ private extension PhotoEditorView {
     }
     
     var resetButton: some View {
-        Button("Сбросить изменения") {
+        Button {
             currentScale = 1.0
             finalScale = 1.0
             currentRotation = .zero
             finalRotation = .zero
             textPosition = .zero
             canvasWrapper.clear()
+        } label: {
+            Label("Сбросить", systemImage: "arrow.uturn.backward")
+                .uniformButtonStyle(backgroundColor: Color.orange)
         }
-        .padding()
-        .frame(maxWidth: .infinity)
-        .background(Color(.systemGray6))
-        .cornerRadius(10)
     }
 
     var emailText: some View {
@@ -196,19 +231,17 @@ private extension PhotoEditorView {
                     .allowsHitTesting(true)
             }
         }
-        .frame(maxWidth: 300, maxHeight: 300)
+        .frame(maxWidth: .infinity, maxHeight: 300)
         .background(Color.white)
     }
     
     var drawingToggleButton: some View {
-        Button("Рисование") {
+        Button {
             showDrawingCanvas.toggle()
+        } label: {
+            Label("Рисование", systemImage: "pencil.tip.crop.circle")
+                .uniformButtonStyle(backgroundColor: Color.indigo)
         }
-        .padding()
-        .frame(maxWidth: .infinity)
-        .background(Color.orange)
-        .foregroundColor(.white)
-        .cornerRadius(10)
     }
     
     var editableImage: some View {
@@ -280,65 +313,97 @@ private extension PhotoEditorView {
         PhotosPicker(selection: $selectedItem,
                      matching: .images,
                      photoLibrary: .shared()) {
-            Text("Выбрать изображение")
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(Color.blue)
-                .foregroundColor(.white)
-                .cornerRadius(10)
-        }
-    }
-    var deleteButton: some View {
-        Button("Удалить изображение") {
-            profileImageBase64 = ""
-        }
-        .padding()
-        .frame(maxWidth: .infinity)
-        .foregroundColor(.white)
-        .background(Color.gray)
-        .cornerRadius(10)
-    }
-    var saveButton: some View {
-        Button("Сохранить изображение") {
-            let base = editableImage.snapshot().resize(to: CGSize(width: 300, height: 300))
-            if let combined = canvasWrapper.renderedImage(size: base.size, base: base) {
-                UIImageWriteToSavedPhotosAlbum(combined, nil, nil, nil)
-                showSaveAlert = true
-            }
-        }
-        .padding()
-        .frame(maxWidth: .infinity)
-        .background(Color.green)
-        .foregroundColor(.white)
-        .cornerRadius(10)
-        .alert("✅ Сохранено", isPresented: $showSaveAlert) {
-            Button("ОК", role: .cancel) { }
+            Label("Выбрать", systemImage: "photo.on.rectangle")
+                .uniformButtonStyle(backgroundColor: Color.indigo)
         }
     }
     
-    var shareButton: some View {
-        Button("Поделиться") {
-            let base = editableImage.snapshot().resize(to: CGSize(width: 300, height: 300))
-            if let finalImage = canvasWrapper.renderedImage(size: base.size, base: base) {
-                imageToShare = finalImage
-                showShareSheet = true
-            }
+    var rotateButton: some View {
+        Button {
+            finalRotation += Angle(degrees: 90)
+        } label: {
+            Label("Повернуть", systemImage: "rotate.right")
+                .uniformButtonStyle(backgroundColor: Color.indigo)
         }
-        .padding()
-        .frame(maxWidth: .infinity)
-        .background(Color.cyan)
-        .foregroundColor(.white)
-        .cornerRadius(10)
+    }
+
+    var deleteButton: some View {
+        Button {
+            profileImageBase64 = ""
+        } label: {
+            Label("Удалить", systemImage: "trash")
+                .uniformButtonStyle(backgroundColor: Color.red)
+        }
     }
     
     private var profileImageData: Data? {
         Data(base64Encoded: profileImageBase64)
     }
+    
+    var editingSection: some View {
+        VStack(spacing: 8) {
+            Text("Редактирование изображения")
+                .font(.headline)
+
+            HStack(spacing: 12) {
+                Menu {
+                    Button("Сепия") {
+                        self.applyFilter(type: .sepia)
+                    }
+                    Button("Ч/Б") {
+                        self.applyFilter(type: .mono)
+                    }
+                    Button("Блюр") {
+                        self.applyFilter(type: .blur)
+                    }
+                } label: {
+                    Label("Фильтры", systemImage: "slider.horizontal.3")
+                        .uniformButtonStyle(backgroundColor: Color.indigo)
+                }
+
+                rotateButton
+            }
+
+            HStack(spacing: 12) {
+                drawingToggleButton
+                resetButton
+            }
+        }
+        .frame(maxWidth: .infinity)
+    }
+
+    var imageSection: some View {
+        VStack(spacing: 8) {
+            Text("Работа с изображением")
+                .font(.headline)
+
+            HStack(spacing: 12) {
+                uploadButton
+                deleteButton
+            }
+        }
+        .frame(maxWidth: .infinity)
+    }
+
+    var infoSection: some View {
+        VStack(spacing: 8) {
+            header
+            emailText
+            signOutButton
+        }
+        .padding(.top, 24)
+    }
 }
 
-#Preview {
-    PhotoEditorView(userEmail: "preview@example.com")
-        .environmentObject(AuthViewModel())
+private extension View {
+    func uniformButtonStyle(backgroundColor: Color) -> some View {
+        self
+            .padding(.vertical, 6)
+            .frame(width: 130)
+            .background(backgroundColor)
+            .foregroundColor(.white)
+            .cornerRadius(8)
+    }
 }
 
 struct ShareSheet: UIViewControllerRepresentable {
@@ -349,4 +414,9 @@ struct ShareSheet: UIViewControllerRepresentable {
     }
 
     func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
+}
+
+#Preview {
+    PhotoEditorView(userEmail: "preview@example.com")
+        .environmentObject(AuthViewModel())
 }
