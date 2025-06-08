@@ -35,7 +35,7 @@
 
 | Вход (email) | Вход (Google) | Редактирование | Фильтры | Рисование | Сохранение | Экспорт |
 |--------------|---------------|----------------|---------|-----------|------------|---------|
-| <img src="Screenshots/login.gif" width="200"/> | <img src="Screenshots/Google.jpeg" width="200"/> | <img src="Screenshots/edit.jpg" width="270"/> | <img src="Screenshots/filters.jpg" width="270"/> | <img src="Screenshots/draw.PNG" width="270"/> | <img src="Screenshots/save.jpg" width="270"/> | <img src="Screenshots/export.jpg" width="270"/> |
+| <img src="Screenshots/login.gif" width="200"/> | <img src="Screenshots/Google.jpeg" width="200"/> | <img src="Screenshots/edit.jpg" width="270"/> | <img src="Screenshots/filters.jpg" width="270"/> | <img src="Screenshots/draw.jpeg" width="270"/> | <img src="Screenshots/save.jpg" width="270"/> | <img src="Screenshots/export.jpg" width="270"/> |
 ---
 
 ## ✨ Возможности
