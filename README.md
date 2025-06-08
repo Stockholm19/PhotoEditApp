@@ -82,11 +82,12 @@
 
 ## 🧪 Тестирование
 
-Реализованы базовые юнит-тесты:
-- `AuthValidatorTests` — проверка корректности email и пароля
-- `ImageTransformTests` — масштабирование, поворот, объединение изображений
+Реализованы юнит-тесты для проверки валидации данных:
 
-Написаны с использованием `XCTest` и покрывают ключевые функции ViewModel'ей и сервисов.
+- AuthValidatorTests — проверяют корректность формата email.
+
+
+Тесты написаны с использованием XCTest. В планах — расширение тестового покрытия на другие модули приложения.
 
 
 ---
@@ -212,6 +213,16 @@ The project follows the **MVVM** design pattern:
 - `Model` / `Service` — responsible for Firebase operations and image filters
 
 Data flow between layers is managed using `@StateObject`, `@Published`, `Combine`, and `@AppStorage`.
+
+---
+
+## 🧪 Testing
+
+Unit tests have been implemented to verify data validation:
+
+*   `AuthValidatorTests` — verify the correctness of the email format.
+
+Tests are written using `XCTest`. Future plans include expanding test coverage to other application modules.
 
 ---
 
