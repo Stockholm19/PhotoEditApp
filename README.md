@@ -167,7 +167,7 @@ Built as a test project using **SwiftUI**, **MVVM**, and **Firebase Auth**.
 
 | Email Login | Google Sign-In | Editing | Filters | Drawing | Export |
 |--------------|----------------|---------|---------|---------|--------|
-| <img src="Screenshots/login.gif" width="200"/> | <img src="Screenshots/Google.jpeg" width="200"/> | <img src="Screenshots/edit.PNG" width="270"/> | <img src="Screenshots/Filters.PNG" width="270"/> | <img src="Screenshots/draw.PNG" width="270"/> | <img src="Screenshots/export.PNG" width="270"/> |
+| <img src="Screenshots/login.gif" width="200"/> | <img src="Screenshots/Google.jpeg" width="200"/> | <img src="Screenshots/edit.jpg" width="270"/> | <img src="Screenshots/filters.jpg" width="270"/> | <img src="Screenshots/draw.jpeg" width="270"/> | <img src="Screenshots/save.jpg" width="270"/> | <img src="Screenshots/export.jpg" width="270"/> |
 
 ---
 
