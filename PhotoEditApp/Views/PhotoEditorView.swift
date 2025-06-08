@@ -114,39 +114,9 @@ enum ImageFilterType {
     case sepia, mono, blur
 }
 
-struct FilterButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .padding(8)
-            .frame(maxWidth: .infinity)
-            .background(Color.purple.opacity(configuration.isPressed ? 0.7 : 1))
-            .foregroundColor(.white)
-            .cornerRadius(10)
-    }
-}
-
 // MARK: - Subviews
 
 private extension PhotoEditorView {
-    
-    var filterButtons: some View {
-        HStack {
-            Button("Сепия") {
-                self.applyFilter(type: .sepia)
-            }
-            .buttonStyle(FilterButtonStyle())
-
-            Button("Ч/Б") {
-                self.applyFilter(type: .mono)
-            }
-            .buttonStyle(FilterButtonStyle())
-
-            Button("Блюр") {
-                self.applyFilter(type: .blur)
-            }
-            .buttonStyle(FilterButtonStyle())
-        }
-    }
     
     func applyFilter(type: ImageFilterType) {
         // Если нажимаю тот же фильтр — он сбрасывается
