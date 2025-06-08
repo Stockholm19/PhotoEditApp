@@ -30,6 +30,7 @@ struct PhotoEditApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(authViewModel)
+                .preferredColorScheme(.light)
         }
     }
 }
