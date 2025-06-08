@@ -35,7 +35,7 @@
 
 | Вход (email) | Вход (Google) | Редактирование | Фильтры | Рисование | Экспорт |
 |--------------|----------------|----------------|---------|-----------|---------|
-| <img src="Screenshots/login.gif" width="200"/> | <img src="Screenshots/Google.jpeg" width="200"/> | <img src="Screenshots/edit.PNG" width="270"/> | <img src="Screenshots/Filters.PNG" width="270"/> | <img src="Screenshots/draw.PNG" width="270"/> | <img src="Screenshots/export.PNG" width="270"/> |
+| <img src="Screenshots/login.gif" width="200"/> | <img src="Screenshots/Google.jpeg" width="200"/> |  |  |  | <img src="Screenshots/export.PNG" width="270"/> |
 
 ---
 
