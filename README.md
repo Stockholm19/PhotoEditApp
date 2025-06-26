@@ -9,7 +9,7 @@
 > 🔐 Firebase Auth + Google Sign-In  
 > 🎨 Photos: text, filters, and drawing
 
-**PhotoEditApp** is a simple iOS app for image editing with Firebase-based authentication.  
+**PhotoEditApp** is a iOS app for image editing with Firebase-based authentication.  
 Built as a test project using **SwiftUI**, **MVVM**, and **Firebase Auth**.
 
 ---
@@ -139,7 +139,7 @@ Tests are written using `XCTest`. Future plans include expanding test coverage t
 > 🔐 Firebase Auth + Google Sign-In  
 > 🎨 Фото + текст + фильтры + рисование  
 
-**PhotoEditApp** — простое iOS-приложение для редактирования изображений с авторизацией.  
+**PhotoEditApp** — iOS-приложение для редактирования фото/картинок с авторизацией через Google.  
 Разработано как тестовое задание с использованием **SwiftUI**, **Firebase** и архитектуры **MVVM**.
 
 
