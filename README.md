@@ -208,7 +208,3 @@ Tests are written using `XCTest`. Future work will expand test coverage to other
 - [ ] Поддержка iPad и мультитач
 - [ ] Улучшение тем и анимаций
 
-## Автор
-
-**Роман Пшеничников**  
-[GitHub](https://github.com/Stockholm19)
